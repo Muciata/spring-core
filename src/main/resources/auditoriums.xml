@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+        <bean id="auditorium1" class="ua.epam.spring.hometask.domain.Auditorium">
+            <property name="name" value="Left Auditorium"/>
+            <property name="numberOfSeats" value="50"/>
+            <property name="vipSeats" value="#{'10,11,12,13,14'.split(',')}"/>
+        </bean>
+
+        <bean id="auditorium2" class="ua.epam.spring.hometask.domain.Auditorium">
+            <property name="name" value="Right Auditorium"/>
+            <property name="numberOfSeats" value="20"/>
+            <property name="vipSeats" value="#{'1,2,3,4'.split(',')}"/>
+        </bean>
+
+</beans>
