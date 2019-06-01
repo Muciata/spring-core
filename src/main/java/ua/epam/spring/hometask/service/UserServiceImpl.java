@@ -8,13 +8,13 @@ import java.util.*;
 
 public class UserServiceImpl implements UserService {
 
-    private final Map<Long,User> users =  new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
     @Nullable
     @Override
     public User getUserByEmail(@Nonnull String email) {
         Optional<User> foundUser = users.values().stream()
-                .filter(user-> Objects.nonNull(user.getEmail()))
+                .filter(user -> Objects.nonNull(user.getEmail()))
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst();
         return foundUser.orElse(null);
@@ -23,24 +23,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(@Nonnull User user) {
         Long id = user.getId();
-        if(id!=null){
+        if (id != null) {
             users.put(id, user);
             return user;
-        }else {
+        } else {
             return null;
         }
     }
 
     @Override
     public void remove(@Nonnull User object) {
-        if(object.getId()!=null || users.containsKey(object.getId())){
+        if (object.getId() != null || users.containsKey(object.getId())) {
             users.remove(object.getId());
         }
     }
 
     @Override
     public User getById(@Nonnull Long id) {
-        return users.getOrDefault(id,null);
+        return users.getOrDefault(id, null);
     }
 
     @Nonnull

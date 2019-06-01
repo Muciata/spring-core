@@ -29,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user, @Nonnull Set<Long> seats) {
         Auditorium auditorium = event.getAuditoriums().get(dateTime);
-        return calculatePrice(seats,auditorium.getVipSeats());
+        return calculatePrice(seats, auditorium.getVipSeats());
     }
 
     private double calculatePrice(Set<Long> seats, Set<Long> vipSeats) {
@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
     public void bookTickets(@Nonnull Set<Ticket> tickets) {
         allTickets.addAll(tickets);
         tickets.stream()
-                .filter(ticket -> ticket.getUser()!=null)
+                .filter(ticket -> ticket.getUser() != null)
                 .forEach(ticket -> ticket.getUser().getTickets().add(ticket));
 
     }
@@ -54,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
     public Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) {
         return allTickets.stream()
                 .filter(ticket -> ticket.getEvent().equals(event))
-                .filter(ticket->ticket.getEvent().getAirDates().contains(dateTime))
+                .filter(ticket -> ticket.getEvent().getAirDates().contains(dateTime))
                 .collect(Collectors.toSet());
     }
 }

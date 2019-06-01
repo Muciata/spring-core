@@ -13,9 +13,9 @@ public class GroupTicketsDiscountStrategy implements DiscountService {
 
     @Override
     public byte getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
-        double unpaidTickets = numberOfTickets / (double)DISCOUNT_PER_TICKETS /2.0;
+        double unpaidTickets = numberOfTickets / (double) DISCOUNT_PER_TICKETS / 2.0;
 
-        return (byte)(100*unpaidTickets/numberOfTickets);
+        return (byte) (100 * unpaidTickets / numberOfTickets);
     }
 
 }

@@ -18,7 +18,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public byte getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
-        return (byte)discountStrategies.stream()
+        return (byte) discountStrategies.stream()
                 .mapToInt(strategy -> strategy.getDiscount(user, event, airDateTime, numberOfTickets))
                 .max()
                 .orElse(0);

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class EventServiceImpl implements EventService{
+public class EventServiceImpl implements EventService {
 
     private Map<Long, Event> events = new HashMap<>();
 
@@ -24,7 +24,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event save(@Nonnull Event event) {
-        if(event.getId()!=null){
+        if (event.getId() != null) {
             return events.put(event.getId(), event);
         }
         return null;
@@ -32,16 +32,16 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public void remove(@Nonnull Event event) {
-        if(event.getId()!=null){
+        if (event.getId() != null) {
             events.remove(event.getId());
         }
     }
 
     @Override
     public Event getById(@Nonnull Long id) {
-        if(id!=null){
-            return events.getOrDefault(id,null);
-        }else{
+        if (id != null) {
+            return events.getOrDefault(id, null);
+        } else {
             return null;
         }
     }
