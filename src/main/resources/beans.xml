@@ -19,9 +19,18 @@
         </constructor-arg>
     </bean>
 
-    <bean id="BookingService" class="ua.epam.spring.hometask.service.BookingService">
-        <constructor-arg ref="EventService" />
-        <constructor-arg ref="AuditoriumService" />
+    <bean id="BookingService" class="ua.epam.spring.hometask.service.BookingServiceImpl">
+        <constructor-arg ref="EventService"  />
+        <constructor-arg ref="AuditoriumService"  />
+    </bean>
+
+    <bean id="DiscountService" class="ua.epam.spring.hometask.service.DiscountServiceImpl">
+        <constructor-arg>
+            <list>
+                <bean id="BirthdayStrategy" class="ua.epam.spring.hometask.service.BirthdayDiscountStrategy" />
+                <bean id="GroupTicketStrategy" class="ua.epam.spring.hometask.service.GroupTicketsDiscountStrategy" />
+            </list>
+        </constructor-arg>
     </bean>
 
 </beans>

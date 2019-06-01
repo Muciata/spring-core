@@ -2,9 +2,11 @@ package ua.epam.spring.hometask.service;
 
 import ua.epam.spring.hometask.domain.User;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +18,8 @@ public class UserFixtures {
         user.setEmail("andrzej.strzelba@gmail.com");
         user.setFirstName("Andrzej");
         user.setLastName("Strzelba");
-        user.setTickets(Collections.emptyNavigableSet());
+        user.setTickets(new TreeSet<>());
+        user.setBirthDay(LocalDate.of(2000,10,10));
         return user;
     }
     public static Collection<User> createMultipleUsers(int n) {
@@ -27,7 +30,8 @@ public class UserFixtures {
             user.setEmail(id+"andrzej.strzelba@gmail.com");
             user.setFirstName("Andrzej"+id);
             user.setLastName("Strzelba"+id);
-            user.setTickets(Collections.emptyNavigableSet());
+            user.setTickets(new TreeSet<>());
+            user.setBirthDay(LocalDate.of(2000,10,10));
             userGroup.add(user);
         }
         return userGroup;

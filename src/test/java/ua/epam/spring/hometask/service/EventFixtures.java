@@ -24,6 +24,20 @@ public class EventFixtures {
         return event;
     }
 
+    public static final Event createEvent(String audName){
+        Event event = new Event();
+        event.setId(1L);
+        event.setBasePrice(20.0);
+        event.setName("Hamlet");
+        event.setRating(EventRating.MID);
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        event.setAirDates(new TreeSet<>(
+                Collections.singletonList(
+                        airTime)));
+        event.setAuditoriums(new TreeMap<>(Collections.singletonMap(airTime,createAuditorium(audName))));
+        return event;
+    }
+
     public static final Collection<Event> createEvents(int no){
         Collection<Event> eventGroup = new ArrayList<>();
         for(long id=1;id<=no;id++) {

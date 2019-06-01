@@ -1,13 +1,12 @@
 package ua.epam.spring.hometask.service;
 
-import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Test;
 import ua.epam.spring.hometask.domain.Event;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static ua.epam.spring.hometask.service.EventFixtures.createEvent;
 
 public class EventServiceImplTest {
