@@ -9,6 +9,8 @@ import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.*;
+import ua.epam.spring.hometask.statistics.CounterAspect;
+import ua.epam.spring.hometask.statistics.CounterStatsDao;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -25,7 +27,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveUsers() {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         UserService userService = applicationContext.getBean(UserService.class);
 
 
@@ -42,7 +44,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveEvents(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         EventService eventService = applicationContext.getBean(EventService.class);
 
         eventService.save(EventFixtures.createEvent());
@@ -54,8 +56,65 @@ public class IntegrationTests {
     }
 
     @Test
+    public void shouldCountOnlyEventByNameInvocations(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        EventService eventService = applicationContext.getBean(EventService.class);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+        eventService.save(EventFixtures.createEvent());
+        for(int i=0;i<5;i++) {
+            eventService.getByName("Hamlet");
+            auditoriumService.getByName("Hamlet");
+        }
+
+        assertEquals(5,eventStats.getStatsForName("Hamlet").getCallsByName());
+    }
+
+    @Test
+    public void shouldCountPriceChecks(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        UserService userService = applicationContext.getBean(UserService.class);
+        User user = UserFixtures.createDefaultUser();
+        EventService eventService = applicationContext.getBean(EventService.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        BookingService bookingService = applicationContext.getBean(BookingService.class);
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+
+        userService.save(user);
+        eventService.save(event);
+        int numberOfTickets = 20;
+        Set<Long> seats = createSeats(numberOfTickets);
+        bookingService.getTicketsPrice(event, airTime, user, seats);
+
+        assertEquals(1,eventStats.getStatsForName("Hamlet").getCallsByPriceCheck());
+    }
+
+    @Test
+    public void shouldCountTicketBookings(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        UserService userService = applicationContext.getBean(UserService.class);
+        User user = UserFixtures.createDefaultUser();
+        EventService eventService = applicationContext.getBean(EventService.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        BookingService bookingService = applicationContext.getBean(BookingService.class);
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+        userService.save(user);
+        eventService.save(event);
+        Set<Ticket> purchasedTickets = Collections.singleton(new Ticket(user, event, airTime, 20));
+        bookingService.bookTickets(purchasedTickets);
+        bookingService.bookTickets(purchasedTickets);
+
+        assertEquals(2,eventStats.getStatsForName("Hamlet").getCallsByTicketsBooked());
+    }
+
+    @Test
     public void shouldReturnAuditoriums(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
 
         Auditorium auditorium1 = auditoriumService.getByName("Left Auditorium");
@@ -68,7 +127,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldBookTickets(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         User user = UserFixtures.createDefaultUser();
         LocalDateTime airTime = LocalDateTime.of(2019,10,10,20,0);
@@ -85,7 +144,7 @@ public class IntegrationTests {
 
     @Test
     public void newUserBuysTickets(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         UserService userService = applicationContext.getBean(UserService.class);
         User user = UserFixtures.createDefaultUser();
