@@ -1,15 +1,19 @@
 package ua.epam.spring.hometask.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Auditorium;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+@Service("AuditoriumService")
 public class AuditoriumServiceImpl implements AuditoriumService {
 
     private final Set<Auditorium> auditoriumGroup;
 
+    @Autowired
     public AuditoriumServiceImpl(Set<Auditorium> auditoriumGroup) {
         this.auditoriumGroup = auditoriumGroup;
     }

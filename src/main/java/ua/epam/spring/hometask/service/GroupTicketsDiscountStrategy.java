@@ -1,5 +1,6 @@
 package ua.epam.spring.hometask.service;
 
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.User;
 
@@ -7,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 
+@Service("GroupTicketsDiscountStrategy")
 public class GroupTicketsDiscountStrategy implements DiscountService {
 
     private static final int DISCOUNT_PER_TICKETS = 10;

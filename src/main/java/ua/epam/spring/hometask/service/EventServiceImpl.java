@@ -1,5 +1,6 @@
 package ua.epam.spring.hometask.service;
 
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Event;
 
 import javax.annotation.Nonnull;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Service("EventService")
 public class EventServiceImpl implements EventService {
 
     private Map<Long, Event> events = new HashMap<>();

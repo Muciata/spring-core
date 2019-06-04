@@ -1,5 +1,7 @@
 package ua.epam.spring.hometask.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
@@ -12,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service("BookingService")
 public class BookingServiceImpl implements BookingService {
 
     private static final int TICKET_PRICE = 10;
@@ -20,6 +23,7 @@ public class BookingServiceImpl implements BookingService {
     private AuditoriumService auditoriumService;
     private Set<Ticket> allTickets;
 
+    @Autowired
     public BookingServiceImpl(EventService eventService, AuditoriumService auditoriumService) {
         this.eventService = eventService;
         this.auditoriumService = auditoriumService;
@@ -46,7 +50,6 @@ public class BookingServiceImpl implements BookingService {
         tickets.stream()
                 .filter(ticket -> ticket.getUser() != null)
                 .forEach(ticket -> ticket.getUser().getTickets().add(ticket));
-
     }
 
     @Nonnull

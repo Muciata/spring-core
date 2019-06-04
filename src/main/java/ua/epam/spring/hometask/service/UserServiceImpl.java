@@ -1,11 +1,13 @@
 package ua.epam.spring.hometask.service;
 
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.User;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@Service("UserService")
 public class UserServiceImpl implements UserService {
 
     private final Map<Long, User> users = new HashMap<>();

@@ -2,6 +2,7 @@ package ua.epam.spring.hometask.integration;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
@@ -24,7 +25,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveUsers() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
         UserService userService = applicationContext.getBean(UserService.class);
 
 
@@ -41,7 +42,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveEvents(){
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
         EventService eventService = applicationContext.getBean(EventService.class);
 
         eventService.save(EventFixtures.createEvent());
@@ -54,11 +55,11 @@ public class IntegrationTests {
 
     @Test
     public void shouldReturnAuditoriums(){
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
 
-        Auditorium auditorium1 = auditoriumService.getByName("Muzyczny");
-        Auditorium auditorium2 = auditoriumService.getByName("Roma");
+        Auditorium auditorium1 = auditoriumService.getByName("Left Auditorium");
+        Auditorium auditorium2 = auditoriumService.getByName("Right Auditorium");
 
         assertEquals(auditorium1.getName(),"Left Auditorium");
         assertEquals(auditorium2.getName(),"Right Auditorium");
@@ -67,7 +68,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldBookTickets(){
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         User user = UserFixtures.createDefaultUser();
         LocalDateTime airTime = LocalDateTime.of(2019,10,10,20,0);
@@ -84,7 +85,7 @@ public class IntegrationTests {
 
     @Test
     public void newUserBuysTickets(){
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service");
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         UserService userService = applicationContext.getBean(UserService.class);
         User user = UserFixtures.createDefaultUser();
@@ -92,7 +93,7 @@ public class IntegrationTests {
         Event event = EventFixtures.createEvent("Left Auditorium");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        DiscountService discountService = applicationContext.getBean(DiscountService.class);
+        DiscountService discountService = applicationContext.getBean("DiscountService",DiscountService.class);
 
         userService.save(user);
         User userById = userService.getById(user.getId());
