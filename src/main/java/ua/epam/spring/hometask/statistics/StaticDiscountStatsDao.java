@@ -3,12 +3,13 @@ package ua.epam.spring.hometask.statistics;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
+import ua.epam.spring.hometask.domain.User;
 
 @Repository
 final class StaticDiscountStatsDao implements DiscountStatsDao {
 
     private int totalDiscount = 0;
-    private Map<String,Integer> userDiscounts = new HashMap<>();
+    private Map<User,Integer> userDiscounts = new HashMap<>();
 
     @Override
     public int getTotalDiscounts() {
@@ -21,12 +22,12 @@ final class StaticDiscountStatsDao implements DiscountStatsDao {
     }
 
     @Override
-    public int getUserDiscounts(String userName) {
+    public int getUserDiscounts(User userName) {
         return userDiscounts.getOrDefault(userName,0);
     }
 
     @Override
-    public void saveUserDiscount(String userName, int discounts) {
+    public void saveUserDiscount(User userName, int discounts) {
         userDiscounts.put(userName, discounts);
     }
 }

@@ -1,12 +1,14 @@
 package ua.epam.spring.hometask.statistics;
 
+import ua.epam.spring.hometask.domain.User;
+
 public interface DiscountStatsDao {
 
     int getTotalDiscounts();
 
     void saveTotalDiscount(int total);
 
-    int getUserDiscounts(String userName);
+    int getUserDiscounts(User user);
 
-    void saveUserDiscount(String userName, int discounts);
+    void saveUserDiscount(User user, int discounts);
 }

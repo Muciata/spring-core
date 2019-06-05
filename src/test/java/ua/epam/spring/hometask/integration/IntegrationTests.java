@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import ua.epam.spring.hometask.statistics.DiscountStatsDao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,12 +31,10 @@ public class IntegrationTests {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         UserService userService = applicationContext.getBean(UserService.class);
 
-
         UserFixtures.createMultipleUsers(5).forEach(userService::save);
         User userByEmail = userService.getUserByEmail("5andrzej.strzelba@gmail.com");
         User userById = userService.getById(4L);
         userService.remove(userByEmail);
-
 
         UserFixtures.assertUser(userByEmail,5L);
         UserFixtures.assertUser(userById, 4L);
@@ -55,62 +54,7 @@ public class IntegrationTests {
         assertEquals(1,eventService.getAll().size());
     }
 
-    @Test
-    public void shouldCountOnlyEventByNameInvocations(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
-        EventService eventService = applicationContext.getBean(EventService.class);
-        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
 
-        eventService.save(EventFixtures.createEvent());
-        for(int i=0;i<5;i++) {
-            eventService.getByName("Hamlet");
-            auditoriumService.getByName("Hamlet");
-        }
-
-        assertEquals(5,eventStats.getStatsForName("Hamlet").getCallsByName());
-    }
-
-    @Test
-    public void shouldCountPriceChecks(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
-        UserService userService = applicationContext.getBean(UserService.class);
-        User user = UserFixtures.createDefaultUser();
-        EventService eventService = applicationContext.getBean(EventService.class);
-        Event event = EventFixtures.createEvent("Left Auditorium");
-        BookingService bookingService = applicationContext.getBean(BookingService.class);
-        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
-
-
-        userService.save(user);
-        eventService.save(event);
-        int numberOfTickets = 20;
-        Set<Long> seats = createSeats(numberOfTickets);
-        bookingService.getTicketsPrice(event, airTime, user, seats);
-
-        assertEquals(1,eventStats.getStatsForName("Hamlet").getCallsByPriceCheck());
-    }
-
-    @Test
-    public void shouldCountTicketBookings(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
-        UserService userService = applicationContext.getBean(UserService.class);
-        User user = UserFixtures.createDefaultUser();
-        EventService eventService = applicationContext.getBean(EventService.class);
-        Event event = EventFixtures.createEvent("Left Auditorium");
-        BookingService bookingService = applicationContext.getBean(BookingService.class);
-        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
-
-        userService.save(user);
-        eventService.save(event);
-        Set<Ticket> purchasedTickets = Collections.singleton(new Ticket(user, event, airTime, 20));
-        bookingService.bookTickets(purchasedTickets);
-        bookingService.bookTickets(purchasedTickets);
-
-        assertEquals(2,eventStats.getStatsForName("Hamlet").getCallsByTicketsBooked());
-    }
 
     @Test
     public void shouldReturnAuditoriums(){
@@ -185,6 +129,77 @@ public class IntegrationTests {
         return  seats.stream()
                 .map(seat-> new Ticket(userById,eventById,airTime,seat))
                 .collect(Collectors.toSet());
+    }
+    @Test
+    public void shouldCountOnlyEventByNameInvocations(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        EventService eventService = applicationContext.getBean(EventService.class);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+        eventService.save(EventFixtures.createEvent());
+        for(int i=0;i<5;i++) {
+            eventService.getByName("Hamlet");
+            auditoriumService.getByName("Hamlet");
+        }
+
+        assertEquals(5,eventStats.getStatsForName("Hamlet").getCallsByName());
+    }
+
+    @Test
+    public void shouldCountPriceChecks(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        UserService userService = applicationContext.getBean(UserService.class);
+        User user = UserFixtures.createDefaultUser();
+        EventService eventService = applicationContext.getBean(EventService.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        BookingService bookingService = applicationContext.getBean(BookingService.class);
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+        userService.save(user);
+        eventService.save(event);
+        int numberOfTickets = 20;
+        Set<Long> seats = createSeats(numberOfTickets);
+        bookingService.getTicketsPrice(event, airTime, user, seats);
+
+        assertEquals(1,eventStats.getStatsForName("Hamlet").getCallsByPriceCheck());
+    }
+
+    @Test
+    public void shouldCountTicketBookings(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        UserService userService = applicationContext.getBean(UserService.class);
+        User user = UserFixtures.createDefaultUser();
+        EventService eventService = applicationContext.getBean(EventService.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        BookingService bookingService = applicationContext.getBean(BookingService.class);
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+
+        userService.save(user);
+        eventService.save(event);
+        Set<Ticket> purchasedTickets = Collections.singleton(new Ticket(user, event, airTime, 20));
+        bookingService.bookTickets(purchasedTickets);
+        bookingService.bookTickets(purchasedTickets);
+
+        assertEquals(2,eventStats.getStatsForName("Hamlet").getCallsByTicketsBooked());
+    }
+
+    @Test
+    public void shouldCountAllDiscountCalls(){
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        User user = UserFixtures.createDefaultUser();
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
+        DiscountStatsDao discountStatsDao = applicationContext.getBean(DiscountStatsDao.class);
+        DiscountService discountService = applicationContext.getBean("DiscountService",DiscountService.class);
+
+        for(int i=0;i<5;i++) {
+            discountService.getDiscount(user, event, airTime, 20);
+        }
+
+        assertEquals(5,discountStatsDao.getTotalDiscounts());
     }
 
 }
