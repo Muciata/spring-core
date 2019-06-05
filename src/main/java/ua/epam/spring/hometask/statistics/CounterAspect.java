@@ -23,7 +23,7 @@ public class CounterAspect {
         this.counterStatsDao = counterStatsDao;
     }
 
-    @Before(value = "execution(* ua.epam.spring.hometask.service.EventService.getCallsByName(*))")
+    @Before(value = "execution(* ua.epam.spring.hometask.service.EventService.getByName(*))")
     public void logEventByName(JoinPoint joinPoint){
         String name = (String) joinPoint.getArgs()[0];
         EventStatistics statsForName = counterStatsDao.getStatsForName(name);

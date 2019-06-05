@@ -12,7 +12,7 @@ import java.util.Set;
 @Repository("StaticCounterStatsDao")
 public class StaticCounterStatsDao implements CounterStatsDao{
 
-    private static Map<String,EventStatistics> statsByName = new HashMap<>();
+    private Map<String,EventStatistics> statsByName = new HashMap<>();
 
     @Override
     public void saveStats(EventStatistics eventStatistics) {
