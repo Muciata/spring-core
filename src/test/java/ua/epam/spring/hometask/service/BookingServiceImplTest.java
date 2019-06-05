@@ -17,6 +17,7 @@ import java.util.stream.LongStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookingServiceImplTest {
@@ -27,12 +28,15 @@ public class BookingServiceImplTest {
     @Mock
     private AuditoriumService auditoriumService;
 
+    @Mock
+    private TicketDao ticketDao;
+
     private static final LocalDateTime AIR_TIME = LocalDateTime.of(2019, 10, 12, 19, 0);
 
 
     @Test
     public void shouldReturnTicketPrice(){
-        BookingService bookingService = new BookingServiceImpl(eventService,auditoriumService);
+        BookingService bookingService = new BookingServiceImpl(eventService,auditoriumService, ticketDao);
         Event event = EventFixtures.createEvent();
         User user = UserFixtures.createDefaultUser();
         Set<Long> seats = LongStream.rangeClosed(1,20)
@@ -46,10 +50,11 @@ public class BookingServiceImplTest {
 
     @Test
     public void shouldReturnPurchasedTicketForEvent(){
-        BookingService bookingService = new BookingServiceImpl(eventService, auditoriumService);
         Event event = EventFixtures.createEvent();
         User user = UserFixtures.createDefaultUser();
         Ticket ticket = new Ticket(user, event, AIR_TIME, 19L);
+        when(ticketDao.getAll()).thenReturn(Collections.singleton(ticket));
+        BookingService bookingService = new BookingServiceImpl(eventService, auditoriumService, ticketDao);
         bookingService.bookTickets(Collections.singleton(ticket));
 
         Set<Ticket> purchasedTickets = bookingService.getPurchasedTicketsForEvent(event, AIR_TIME);

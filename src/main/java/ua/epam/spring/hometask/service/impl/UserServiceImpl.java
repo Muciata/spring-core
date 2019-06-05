@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
     @Nullable
     @Override
     public User getUserByEmail(@Nonnull String email) {
-
         return userDao.getByEmail(email);
     }
 

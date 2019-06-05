@@ -9,11 +9,11 @@ import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.AuditoriumService;
 import ua.epam.spring.hometask.service.BookingService;
 import ua.epam.spring.hometask.service.EventService;
+import ua.epam.spring.hometask.service.TicketDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,13 +24,13 @@ public class BookingServiceImpl implements BookingService {
     private static final double VIP_PRICE_MODIFIER = 0.2;
     private EventService eventService;
     private AuditoriumService auditoriumService;
-    private Set<Ticket> allTickets;
+    private TicketDao ticketDao;
 
     @Autowired
-    public BookingServiceImpl(EventService eventService, AuditoriumService auditoriumService) {
+    public BookingServiceImpl(EventService eventService, AuditoriumService auditoriumService, TicketDao ticketDao) {
         this.eventService = eventService;
         this.auditoriumService = auditoriumService;
-        this.allTickets = new HashSet<>();
+        this.ticketDao = ticketDao;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void bookTickets(@Nonnull Set<Ticket> tickets) {
-        allTickets.addAll(tickets);
+        ticketDao.addAll(tickets);
         tickets.stream()
                 .filter(ticket -> ticket.getUser() != null)
                 .forEach(ticket -> ticket.getUser().getTickets().add(ticket));
@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService {
     @Nonnull
     @Override
     public Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) {
-        return allTickets.stream()
+        return ticketDao.getAll().stream()
                 .filter(ticket -> ticket.getEvent().equals(event))
                 .filter(ticket -> ticket.getEvent().getAirDates().contains(dateTime))
                 .collect(Collectors.toSet());
