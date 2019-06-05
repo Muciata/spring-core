@@ -1,4 +1,4 @@
-package ua.epam.spring.hometask.statistics;
+package ua.epam.spring.hometask.statistics.impl;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.statistics.EventStatistics;
+import ua.epam.spring.hometask.statistics.CounterStatsDao;
 
 import java.util.Optional;
 import java.util.Set;

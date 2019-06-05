@@ -1,8 +1,10 @@
-package ua.epam.spring.hometask.service;
+package ua.epam.spring.hometask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Auditorium;
+import ua.epam.spring.hometask.service.AuditoriumDao;
+import ua.epam.spring.hometask.service.AuditoriumService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,23 +13,23 @@ import java.util.Set;
 @Service("AuditoriumService")
 public class AuditoriumServiceImpl implements AuditoriumService {
 
-    private final Set<Auditorium> auditoriumGroup;
+    private AuditoriumDao auditoriumDao;
 
     @Autowired
-    public AuditoriumServiceImpl(Set<Auditorium> auditoriumGroup) {
-        this.auditoriumGroup = auditoriumGroup;
+    public AuditoriumServiceImpl(AuditoriumDao auditoriumDao) {
+        this.auditoriumDao = auditoriumDao;
     }
 
     @Nonnull
     @Override
     public Set<Auditorium> getAll() {
-        return auditoriumGroup;
+        return auditoriumDao.getAll();
     }
 
     @Nullable
     @Override
     public Auditorium getByName(@Nonnull String name) {
-        return auditoriumGroup.stream()
+        return auditoriumDao.getAll().stream()
                 .filter(aud -> aud.getName().equals(name))
                 .findFirst()
                 .orElse(null);

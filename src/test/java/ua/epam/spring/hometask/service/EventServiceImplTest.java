@@ -1,19 +1,30 @@
 package ua.epam.spring.hometask.service;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import ua.epam.spring.hometask.domain.Event;
+import ua.epam.spring.hometask.service.impl.EventServiceImpl;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static ua.epam.spring.hometask.service.EventFixtures.createEvent;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EventServiceImplTest {
+
+    @Mock
+    private EventDao eventDao;
 
     @Test
     public void shouldReturnAllEvents(){
-        EventService subject = new EventServiceImpl();
+        when(eventDao.getAll()).thenReturn(EventFixtures.createEvents(5));
+        EventService subject = new EventServiceImpl(eventDao);
         Collection<Event> eventsInserted = EventFixtures.createEvents(5);
         eventsInserted.forEach(subject::save);
 
@@ -25,7 +36,8 @@ public class EventServiceImplTest {
 
     @Test
     public void shouldReturnEventByName(){
-        EventService subject = new EventServiceImpl();
+        when(eventDao.getByName("Hamlet")).thenReturn(createEvent());
+        EventService subject = new EventServiceImpl(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 
@@ -36,7 +48,9 @@ public class EventServiceImplTest {
 
     @Test
     public void shouldGetById(){
-        EventService subject = new EventServiceImpl();
+        when(eventDao.getById(1L)).thenReturn(createEvent());
+
+        EventService subject = new EventServiceImpl(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 
@@ -47,7 +61,9 @@ public class EventServiceImplTest {
 
     @Test
     public void shouldRemoveEvent(){
-        EventService subject = new EventServiceImpl();
+        when(eventDao.getAll()).thenReturn(Collections.emptySet());
+
+        EventService subject = new EventServiceImpl(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.service.impl.DiscountServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

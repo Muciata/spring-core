@@ -7,6 +7,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.service.impl.BookingServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

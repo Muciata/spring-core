@@ -1,20 +1,34 @@
 package ua.epam.spring.hometask.service;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import ua.epam.spring.hometask.domain.Auditorium;
+import ua.epam.spring.hometask.service.impl.AuditoriumServiceImpl;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 import static ua.epam.spring.hometask.service.AuditoriumFixtures.createAuditorium;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AuditoriumServiceImplTest {
+
+    @Mock
+    private AuditoriumDao auditoriumDao;
+
 
     @Test
     public void shouldReturnAuditoriumByName(){
-        AuditoriumService auditoriumService = new AuditoriumServiceImpl(Collections.singleton(createAuditorium()));
+        when(auditoriumDao.getAll()).thenReturn(Collections.singleton(AuditoriumFixtures.createAuditorium()));
+
+        AuditoriumService auditoriumService = new AuditoriumServiceImpl(auditoriumDao);
 
         Auditorium auditorium = auditoriumService.getByName("1. Auditorium");
 
@@ -26,10 +40,11 @@ public class AuditoriumServiceImplTest {
 
     @Test
     public void shouldReturnAllAuditoriums(){
-        Set<Auditorium> auditoriums = new HashSet<>();
-        auditoriums.add(createAuditorium("Aud1"));
-        auditoriums.add(createAuditorium("Aud2"));
-        AuditoriumService auditoriumService = new AuditoriumServiceImpl(auditoriums);
+        Set<Auditorium> auditoriums = new HashSet<>(Arrays.asList(createAuditorium("Aud1"),
+                createAuditorium("Aud2")));
+        when(auditoriumDao.getAll()).thenReturn(auditoriums);
+
+        AuditoriumService auditoriumService = new AuditoriumServiceImpl(auditoriumDao);
 
         Set<Auditorium> recievedAuditoriums = auditoriumService.getAll();
 

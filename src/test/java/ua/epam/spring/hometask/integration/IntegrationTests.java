@@ -3,13 +3,11 @@ package ua.epam.spring.hometask.integration;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.*;
-import ua.epam.spring.hometask.statistics.CounterAspect;
 import ua.epam.spring.hometask.statistics.CounterStatsDao;
 
 import java.time.LocalDateTime;

@@ -1,18 +1,30 @@
 package ua.epam.spring.hometask.service;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.service.impl.UserServiceImpl;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
+
+    @Mock
+    UserDao userDao;
 
     @Test
     public void shouldReturnUserById(){
-        UserService userService = new UserServiceImpl();
+        when(userDao.getById(anyLong())).thenReturn(UserFixtures.createDefaultUser());
+        UserService userService = new UserServiceImpl(userDao);
         userService.save(UserFixtures.createDefaultUser());
 
         User user = userService.getById(1L);
@@ -22,7 +34,8 @@ public class UserServiceImplTest {
 
     @Test
     public void shouldReturnUserByEmail(){
-        UserService userService = new UserServiceImpl();
+        when(userDao.getByEmail("andrzej.strzelba@gmail.com")).thenReturn(UserFixtures.createDefaultUser());
+        UserService userService = new UserServiceImpl(userDao);
         userService.save(UserFixtures.createDefaultUser());
 
         User user = userService.getUserByEmail("andrzej.strzelba@gmail.com");
@@ -32,7 +45,8 @@ public class UserServiceImplTest {
 
     @Test
     public void shouldReturnAllUsers(){
-        UserService userService = new UserServiceImpl();
+        when(userDao.getAll()).thenReturn(Collections.singleton(UserFixtures.createDefaultUser()));
+        UserService userService = new UserServiceImpl(userDao);
         User userSaved = UserFixtures.createDefaultUser();
         userService.save(userSaved);
 
@@ -44,7 +58,7 @@ public class UserServiceImplTest {
 
     @Test
     public void shouldRemoveUser(){
-        UserService userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl(userDao);
         User userSaved = UserFixtures.createDefaultUser();
         userService.save(userSaved);
 

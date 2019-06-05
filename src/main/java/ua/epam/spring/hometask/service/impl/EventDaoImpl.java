@@ -1,23 +1,20 @@
-package ua.epam.spring.hometask.service;
+package ua.epam.spring.hometask.service.impl;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.Event;
+import ua.epam.spring.hometask.service.EventDao;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Service("EventService")
-public class EventServiceImpl implements EventService {
-
+@Repository
+public class EventDaoImpl implements EventDao {
     private Map<Long, Event> events = new HashMap<>();
 
-    @Nullable
     @Override
-    public Event getByName(@Nonnull String name) {
+    public Event getByName(String name) {
         Optional<Event> foundEvent = events.values().stream()
                 .filter(event -> name.equals(event.getName()))
                 .findFirst();
@@ -25,7 +22,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event save(@Nonnull Event event) {
+    public Event saveEvent(Event event) {
         if (event.getId() != null) {
             return events.put(event.getId(), event);
         }
@@ -33,14 +30,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void remove(@Nonnull Event event) {
+    public void removeEvent(Event event) {
         if (event.getId() != null) {
             events.remove(event.getId());
         }
     }
 
     @Override
-    public Event getById(@Nonnull Long id) {
+    public Event getById(Long id) {
         if (id != null) {
             return events.getOrDefault(id, null);
         } else {
@@ -48,7 +45,6 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    @Nonnull
     @Override
     public Collection<Event> getAll() {
         return events.values();
