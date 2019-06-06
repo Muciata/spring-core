@@ -4,6 +4,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
@@ -20,7 +21,8 @@ public class CounterAspect {
     private CounterStatsDao counterStatsDao;
 
     @Autowired
-    public CounterAspect(CounterStatsDao counterStatsDao) {
+    @Qualifier("Derby")
+    public void setCounterStatsDao(CounterStatsDao counterStatsDao) {
         this.counterStatsDao = counterStatsDao;
     }
 
@@ -28,6 +30,9 @@ public class CounterAspect {
     public void logEventByName(JoinPoint joinPoint){
         String name = (String) joinPoint.getArgs()[0];
         EventStatistics statsForName = counterStatsDao.getStatsForName(name);
+        if(statsForName==null){
+            statsForName = new EventStatistics(name);
+        }
         statsForName.setCallsByName(statsForName.getCallsByName()+1);
         counterStatsDao.saveStats(statsForName);
     }
@@ -36,6 +41,9 @@ public class CounterAspect {
     public void logEventByPriceCheck(JoinPoint joinPoint){
         String name = ((Event) joinPoint.getArgs()[0]).getName();
         EventStatistics statsForName = counterStatsDao.getStatsForName(name);
+        if(statsForName==null){
+            statsForName = new EventStatistics(name);
+        }
         statsForName.setCallsByPriceCheck(statsForName.getCallsByPriceCheck()+1);
         counterStatsDao.saveStats(statsForName);
     }
@@ -47,6 +55,9 @@ public class CounterAspect {
         if(firstTicket.isPresent()) {
             String name = firstTicket.get().getEvent().getName();
             EventStatistics statsForName = counterStatsDao.getStatsForName(name);
+            if(statsForName==null){
+                statsForName = new EventStatistics(name);
+            }
             statsForName.setCallsByTicketsBooked(statsForName.getCallsByTicketsBooked() + 1);
             counterStatsDao.saveStats(statsForName);
         }

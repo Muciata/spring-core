@@ -136,7 +136,7 @@ public class IntegrationTests {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
         EventService eventService = applicationContext.getBean(EventService.class);
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
 
         eventService.save(EventFixtures.createEvent());
         for(int i=0;i<5;i++) {
