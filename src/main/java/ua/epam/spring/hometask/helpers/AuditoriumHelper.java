@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-final class AuditoriumHelper {
+public final class AuditoriumHelper {
 
     public static Set<Long> seatsToString(String s) {
         return Arrays.stream(s
