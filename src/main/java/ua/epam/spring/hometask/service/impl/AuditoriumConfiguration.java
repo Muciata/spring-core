@@ -8,6 +8,9 @@ import org.springframework.core.env.Environment;
 import ua.epam.spring.hometask.domain.Auditorium;
 
 import ua.epam.spring.hometask.helpers.AuditoriumHelper;
+import ua.epam.spring.hometask.service.AuditoriumService;
+
+import javax.annotation.PostConstruct;
 
 @Configuration
 @PropertySource({"classpath:application.properties"})

@@ -1,6 +1,7 @@
 package ua.epam.spring.hometask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.dao.EventDao;
@@ -15,8 +16,10 @@ public class EventServiceImpl implements EventService {
 
     private EventDao eventDao;
 
-    @Autowired
-    public EventServiceImpl(EventDao eventDao) {
+
+    @Autowired()
+    @Qualifier("DerbyEventDao")
+    public void setEventDao(EventDao eventDao) {
         this.eventDao = eventDao;
     }
 

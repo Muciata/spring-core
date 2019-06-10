@@ -19,6 +19,9 @@ public interface AuditoriumService {
     public @Nonnull
     Set<Auditorium> getAll();
 
+
+    public void save(Auditorium auditorium);
+
     /**
      * Finding auditorium by name
      *

@@ -9,9 +9,12 @@ import java.util.StringJoiner;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 
+@Repository("DerbyAuditoriumDao")
 final class DerbyAuditoriumDaoImpl implements AuditoriumDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -26,7 +29,6 @@ final class DerbyAuditoriumDaoImpl implements AuditoriumDao {
         try{
             jdbcTemplate.execute("DROP TABLE auditoriums");
         }catch (Exception ex){
-            ex.printStackTrace();
         }finally {
             jdbcTemplate.execute("CREATE TABLE auditoriums (name varchar(120), number_of_seats int, vip_seats varchar(255))");
         }

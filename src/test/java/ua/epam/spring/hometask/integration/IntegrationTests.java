@@ -56,8 +56,15 @@ public class IntegrationTests {
 
     @Test
     public void shouldReturnAuditoriums(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service",
+                "ua.epam.spring.hometask.dao","ua.epam.spring.hometask.dao.impl",
+                "ua.epam.spring.hometask.statistics");
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
+
 
         Auditorium auditorium1 = auditoriumService.getByName("Left Auditorium");
         Auditorium auditorium2 = auditoriumService.getByName("Right Auditorium");

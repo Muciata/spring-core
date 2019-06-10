@@ -25,7 +25,8 @@ public class EventServiceImplTest {
     @Test
     public void shouldReturnAllEvents(){
         when(eventDao.getAll()).thenReturn(EventFixtures.createEvents(5));
-        EventService subject = new EventServiceImpl(eventDao);
+        EventServiceImpl subject = new EventServiceImpl();
+        subject.setEventDao(eventDao);
         Collection<Event> eventsInserted = EventFixtures.createEvents(5);
         eventsInserted.forEach(subject::save);
 
@@ -38,7 +39,8 @@ public class EventServiceImplTest {
     @Test
     public void shouldReturnEventByName(){
         when(eventDao.getByName("Hamlet")).thenReturn(createEvent());
-        EventService subject = new EventServiceImpl(eventDao);
+        EventServiceImpl subject = new EventServiceImpl();
+        subject.setEventDao(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 
@@ -51,7 +53,8 @@ public class EventServiceImplTest {
     public void shouldGetById(){
         when(eventDao.getById(1L)).thenReturn(createEvent());
 
-        EventService subject = new EventServiceImpl(eventDao);
+        EventServiceImpl subject = new EventServiceImpl();
+        subject.setEventDao(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 
@@ -64,7 +67,8 @@ public class EventServiceImplTest {
     public void shouldRemoveEvent(){
         when(eventDao.getAll()).thenReturn(Collections.emptySet());
 
-        EventService subject = new EventServiceImpl(eventDao);
+        EventServiceImpl subject = new EventServiceImpl();
+        subject.setEventDao(eventDao);
         Event insertedEvent = createEvent();
         subject.save(insertedEvent);
 

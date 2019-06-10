@@ -28,7 +28,8 @@ public class AuditoriumServiceImplTest {
     public void shouldReturnAuditoriumByName(){
         when(auditoriumDao.getAll()).thenReturn(Collections.singleton(AuditoriumFixtures.createAuditorium()));
 
-        AuditoriumService auditoriumService = new AuditoriumServiceImpl(auditoriumDao);
+        AuditoriumServiceImpl auditoriumService = new AuditoriumServiceImpl();
+        auditoriumService.setAuditoriumDao(auditoriumDao);
 
         Auditorium auditorium = auditoriumService.getByName("1. Auditorium");
 
@@ -44,7 +45,8 @@ public class AuditoriumServiceImplTest {
                 createAuditorium("Aud2")));
         when(auditoriumDao.getAll()).thenReturn(auditoriums);
 
-        AuditoriumService auditoriumService = new AuditoriumServiceImpl(auditoriumDao);
+        AuditoriumServiceImpl auditoriumService = new AuditoriumServiceImpl();
+        auditoriumService.setAuditoriumDao(auditoriumDao);
 
         Set<Auditorium> recievedAuditoriums = auditoriumService.getAll();
 

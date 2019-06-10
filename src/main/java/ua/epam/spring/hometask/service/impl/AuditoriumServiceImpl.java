@@ -1,6 +1,7 @@
 package ua.epam.spring.hometask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.dao.AuditoriumDao;
@@ -16,7 +17,8 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     private AuditoriumDao auditoriumDao;
 
     @Autowired
-    public AuditoriumServiceImpl(AuditoriumDao auditoriumDao) {
+    @Qualifier("DerbyAuditoriumDao")
+    public void setAuditoriumDao(AuditoriumDao auditoriumDao) {
         this.auditoriumDao = auditoriumDao;
     }
 
@@ -24,6 +26,11 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     @Override
     public Set<Auditorium> getAll() {
         return auditoriumDao.getAll();
+    }
+
+    @Override
+    public void save(Auditorium auditorium) {
+        auditoriumDao.addAuditorium(auditorium);
     }
 
     @Nullable

@@ -27,7 +27,6 @@ public final class DerbyCounterStatsDaoImpl implements CounterStatsDao {
         try{
             jdbcTemplate.execute("DROP TABLE counterstats");
         }catch(Exception ex){
-            ex.printStackTrace();
         } finally{
             jdbcTemplate.execute("CREATE TABLE counterstats (name VARCHAR(100),callsByName int,callsByPriceCheck int,callsByTicketsBooked int)");
         }

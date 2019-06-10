@@ -4,9 +4,11 @@ import java.util.Collection;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.EventDao;
 import ua.epam.spring.hometask.domain.Event;
 
+@Repository("DerbyEventDao")
 final class DerbyEventDaoImpl implements EventDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -22,17 +24,15 @@ final class DerbyEventDaoImpl implements EventDao {
         try{
             jdbcTemplate.execute("DROP TABLE event_airtimes");
         }catch(Exception ex){
-            ex.printStackTrace();
         }finally {
-            jdbcTemplate.execute("CREATE TABLE event_airTimes( id long, airdate long, aud_name varchar(120)");
+            jdbcTemplate.execute("CREATE TABLE event_airtimes( id int, airdate int, aud_name varchar(120))");
         }
 
         try{
             jdbcTemplate.execute("DROP TABLE events");
         }catch (Exception ex){
-            ex.printStackTrace();
         }finally {
-            jdbcTemplate.execute("CREATE TABLE events (id long, name varchar(120),  base_price float, rating varchar(10))");
+            jdbcTemplate.execute("CREATE TABLE events (id int, name varchar(120),  base_price float, rating varchar(10))");
         }
     }
 
