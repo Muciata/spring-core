@@ -4,9 +4,10 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.User;
-import ua.epam.spring.hometask.statistics.DiscountStatsDao;
+import ua.epam.spring.hometask.dao.DiscountStatsDao;
 
 @Aspect
 @Component
@@ -15,7 +16,8 @@ final class DiscountAspect {
     private DiscountStatsDao discountStatsDao;
 
     @Autowired
-    public DiscountAspect(DiscountStatsDao discountStatsDao) {
+    @Qualifier("Derby")
+    public void setDiscountStatsDao(DiscountStatsDao discountStatsDao) {
         this.discountStatsDao = discountStatsDao;
     }
 

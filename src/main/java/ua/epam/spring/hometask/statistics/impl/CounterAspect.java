@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.statistics.EventStatistics;
-import ua.epam.spring.hometask.statistics.CounterStatsDao;
+import ua.epam.spring.hometask.dao.CounterStatsDao;
 
 import java.util.Optional;
 import java.util.Set;

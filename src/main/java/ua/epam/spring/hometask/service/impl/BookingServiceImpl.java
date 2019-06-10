@@ -9,7 +9,7 @@ import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.AuditoriumService;
 import ua.epam.spring.hometask.service.BookingService;
 import ua.epam.spring.hometask.service.EventService;
-import ua.epam.spring.hometask.service.TicketDao;
+import ua.epam.spring.hometask.dao.TicketDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

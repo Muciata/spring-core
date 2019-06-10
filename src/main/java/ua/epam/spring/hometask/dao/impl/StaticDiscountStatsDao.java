@@ -1,10 +1,10 @@
-package ua.epam.spring.hometask.statistics.impl;
+package ua.epam.spring.hometask.dao.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.User;
-import ua.epam.spring.hometask.statistics.DiscountStatsDao;
+import ua.epam.spring.hometask.dao.DiscountStatsDao;
 
 @Repository
 final class StaticDiscountStatsDao implements DiscountStatsDao {

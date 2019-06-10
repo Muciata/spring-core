@@ -1,9 +1,9 @@
-package ua.epam.spring.hometask.service.impl;
+package ua.epam.spring.hometask.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.Auditorium;
-import ua.epam.spring.hometask.service.AuditoriumDao;
+import ua.epam.spring.hometask.dao.AuditoriumDao;
 
 import java.util.Set;
 

@@ -1,11 +1,11 @@
-package ua.epam.spring.hometask.statistics.impl;
+package ua.epam.spring.hometask.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.statistics.EventStatistics;
-import ua.epam.spring.hometask.statistics.CounterStatsDao;
+import ua.epam.spring.hometask.dao.CounterStatsDao;
 
 import javax.annotation.PostConstruct;
 import java.sql.ResultSet;
@@ -26,7 +26,9 @@ public final class DerbyCounterStatsDao implements CounterStatsDao {
     public void initDB(){
         try{
             jdbcTemplate.execute("DROP TABLE counterstats");
-        }finally {
+        }catch(Exception ex){
+            ex.printStackTrace();
+        } finally{
             jdbcTemplate.execute("CREATE TABLE counterstats (name VARCHAR(100),callsByName int,callsByPriceCheck int,callsByTicketsBooked int)");
         }
     }

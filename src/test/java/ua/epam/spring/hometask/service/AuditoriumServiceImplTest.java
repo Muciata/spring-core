@@ -1,10 +1,10 @@
 package ua.epam.spring.hometask.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.service.impl.AuditoriumServiceImpl;
 

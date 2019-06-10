@@ -1,8 +1,8 @@
-package ua.epam.spring.hometask.service.impl;
+package ua.epam.spring.hometask.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.User;
-import ua.epam.spring.hometask.service.UserDao;
+import ua.epam.spring.hometask.dao.UserDao;
 
 import java.util.*;
 

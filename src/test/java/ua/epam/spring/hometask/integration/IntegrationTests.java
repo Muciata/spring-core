@@ -3,15 +3,12 @@ package ua.epam.spring.hometask.integration;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.*;
-import ua.epam.spring.hometask.statistics.CounterStatsDao;
+import ua.epam.spring.hometask.dao.CounterStatsDao;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -19,7 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import ua.epam.spring.hometask.statistics.DiscountStatsDao;
+import ua.epam.spring.hometask.dao.DiscountStatsDao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -156,7 +153,7 @@ public class IntegrationTests {
         Event event = EventFixtures.createEvent("Left Auditorium");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
 
         userService.save(user);
         eventService.save(event);
@@ -176,7 +173,7 @@ public class IntegrationTests {
         Event event = EventFixtures.createEvent("Left Auditorium");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean(CounterStatsDao.class);
+        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
 
         userService.save(user);
         eventService.save(event);

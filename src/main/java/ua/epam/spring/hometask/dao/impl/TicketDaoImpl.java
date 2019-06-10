@@ -1,8 +1,8 @@
-package ua.epam.spring.hometask.service.impl;
+package ua.epam.spring.hometask.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.Ticket;
-import ua.epam.spring.hometask.service.TicketDao;
+import ua.epam.spring.hometask.dao.TicketDao;
 
 import java.util.Collection;
 import java.util.HashSet;

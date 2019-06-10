@@ -1,14 +1,11 @@
-package ua.epam.spring.hometask.statistics.impl;
+package ua.epam.spring.hometask.dao.impl;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.statistics.EventStatistics;
-import ua.epam.spring.hometask.statistics.CounterStatsDao;
+import ua.epam.spring.hometask.dao.CounterStatsDao;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Repository("StaticCounterStatsDao")
 public class StaticCounterStatsDao implements CounterStatsDao {
