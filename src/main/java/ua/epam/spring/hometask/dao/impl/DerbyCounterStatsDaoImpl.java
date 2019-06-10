@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository("Derby")
-public final class DerbyCounterStatsDao implements CounterStatsDao {
+public final class DerbyCounterStatsDaoImpl implements CounterStatsDao {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public DerbyCounterStatsDao(JdbcTemplate jdbcTemplate) {
+    public DerbyCounterStatsDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

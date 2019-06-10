@@ -6,4 +6,6 @@ import java.util.Set;
 
 public interface AuditoriumDao {
     Set<Auditorium> getAll();
+
+    void addAuditorium(Auditorium auditorium);
 }

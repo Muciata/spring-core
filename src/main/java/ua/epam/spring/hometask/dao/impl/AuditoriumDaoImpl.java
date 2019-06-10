@@ -1,5 +1,6 @@
 package ua.epam.spring.hometask.dao.impl;
 
+import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.domain.Auditorium;
@@ -17,9 +18,13 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
         this.auditoriumGroup = auditoriumGroup;
     }
 
-
     @Override
     public Set<Auditorium> getAll() {
-        return auditoriumGroup;
+        return new HashSet<>(auditoriumGroup);
+    }
+
+    @Override
+    public void addAuditorium(Auditorium auditorium) {
+        auditoriumGroup.add(auditorium);
     }
 }
