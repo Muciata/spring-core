@@ -49,7 +49,7 @@ final class DerbyAuditoriumDaoImpl implements AuditoriumDao {
     public void addAuditorium(Auditorium auditorium) {
         StringJoiner seatJoiner = new StringJoiner(",");
         auditorium.getVipSeats().stream().map(s->String.valueOf(s)).forEach(seatJoiner::add);
-        jdbcTemplate.update("INSERT INTO auditoriums VALUES (?,?,?,?)", auditorium.getName(),
+        jdbcTemplate.update("INSERT INTO auditoriums VALUES (?,?,?)", auditorium.getName(),
                 auditorium.getNumberOfSeats(), seatJoiner.toString());
 
     }

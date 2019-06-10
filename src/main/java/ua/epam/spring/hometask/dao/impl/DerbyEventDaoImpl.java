@@ -20,11 +20,19 @@ final class DerbyEventDaoImpl implements EventDao {
     public void initDB(){
 
         try{
+            jdbcTemplate.execute("DROP TABLE event_airtimes");
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally {
+            jdbcTemplate.execute("CREATE TABLE event_airTimes( id long, airdate long, aud_name varchar(120)");
+        }
+
+        try{
             jdbcTemplate.execute("DROP TABLE events");
         }catch (Exception ex){
             ex.printStackTrace();
         }finally {
-            jdbcTemplate.execute("CREATE TABLE events ()");
+            jdbcTemplate.execute("CREATE TABLE events (id long, name varchar(120),  base_price float, rating varchar(10))");
         }
     }
 
