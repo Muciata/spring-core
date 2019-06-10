@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Repository("Derby")
+@Repository("DerbyCounterStatsDao")
 public final class DerbyCounterStatsDaoImpl implements CounterStatsDao {
 
     private JdbcTemplate jdbcTemplate;

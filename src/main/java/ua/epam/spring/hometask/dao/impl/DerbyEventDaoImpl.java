@@ -1,9 +1,6 @@
 package ua.epam.spring.hometask.dao.impl;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import ua.epam.spring.hometask.dao.EventDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.EventRating;
+import ua.epam.spring.hometask.helpers.DateHelper;
 
 @Repository("DerbyEventDao")
 final class DerbyEventDaoImpl implements EventDao {
@@ -78,7 +76,7 @@ final class DerbyEventDaoImpl implements EventDao {
             LocalDateTime airDate = entry.getKey();
             Auditorium auditorium = entry.getValue();
             jdbcTemplate.update("INSERT INTO event_airtimes VALUES (?, ?, ?)",event.getId(),
-                    airDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), auditorium.getName());
+                    DateHelper.toEpochTime(airDate), auditorium.getName());
         }
 
         jdbcTemplate.update("INSERT INTO events VALUES (?,?,?,?)", event.getId(), event.getName(),
@@ -116,8 +114,7 @@ final class DerbyEventDaoImpl implements EventDao {
         Set<Auditorium> auditoriums = auditoriumDao.getAll();
         List<Object[]> entries = jdbcTemplate.query("SELECT airdate,aud_name FROM event_airtimes WHERE id=?",
                 new Object[]{event.getId()}, (r, i) -> {
-                    LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(r.getLong(1)),
-                            TimeZone.getDefault().toZoneId());
+                    LocalDateTime localDateTime = DateHelper.toLocalDateTime(r.getLong(1));
                     String audName = r.getString(2);
                     Auditorium auditorium = auditoriums.stream()
                             .filter(a -> a.getName().equals(audName))
@@ -131,4 +128,5 @@ final class DerbyEventDaoImpl implements EventDao {
         event.setAirDates(new TreeSet<>(auditories.keySet()));
         event.setAuditoriums(auditories);
     }
+
 }

@@ -25,7 +25,8 @@ public class UserServiceImplTest {
     @Test
     public void shouldReturnUserById(){
         when(userDao.getById(anyLong())).thenReturn(UserFixtures.createDefaultUser());
-        UserService userService = new UserServiceImpl(userDao);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.setUserDao(userDao);
         userService.save(UserFixtures.createDefaultUser());
 
         User user = userService.getById(1L);
@@ -36,7 +37,8 @@ public class UserServiceImplTest {
     @Test
     public void shouldReturnUserByEmail(){
         when(userDao.getByEmail("andrzej.strzelba@gmail.com")).thenReturn(UserFixtures.createDefaultUser());
-        UserService userService = new UserServiceImpl(userDao);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.setUserDao(userDao);;
         userService.save(UserFixtures.createDefaultUser());
 
         User user = userService.getUserByEmail("andrzej.strzelba@gmail.com");
@@ -47,7 +49,8 @@ public class UserServiceImplTest {
     @Test
     public void shouldReturnAllUsers(){
         when(userDao.getAll()).thenReturn(Collections.singleton(UserFixtures.createDefaultUser()));
-        UserService userService = new UserServiceImpl(userDao);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.setUserDao(userDao);
         User userSaved = UserFixtures.createDefaultUser();
         userService.save(userSaved);
 
@@ -59,7 +62,8 @@ public class UserServiceImplTest {
 
     @Test
     public void shouldRemoveUser(){
-        UserService userService = new UserServiceImpl(userDao);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.setUserDao(userDao);
         User userSaved = UserFixtures.createDefaultUser();
         userService.save(userSaved);
 

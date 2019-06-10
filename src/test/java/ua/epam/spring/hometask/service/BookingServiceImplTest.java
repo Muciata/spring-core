@@ -37,7 +37,8 @@ public class BookingServiceImplTest {
 
     @Test
     public void shouldReturnTicketPrice(){
-        BookingService bookingService = new BookingServiceImpl(eventService,auditoriumService, ticketDao);
+        BookingServiceImpl bookingService = new BookingServiceImpl(eventService,auditoriumService);
+        bookingService.setTicketDao(ticketDao);
         Event event = EventFixtures.createEvent();
         User user = UserFixtures.createDefaultUser();
         Set<Long> seats = LongStream.rangeClosed(1,20)
@@ -55,7 +56,8 @@ public class BookingServiceImplTest {
         User user = UserFixtures.createDefaultUser();
         Ticket ticket = new Ticket(user, event, AIR_TIME, 19L);
         when(ticketDao.getAll()).thenReturn(Collections.singleton(ticket));
-        BookingService bookingService = new BookingServiceImpl(eventService, auditoriumService, ticketDao);
+        BookingServiceImpl bookingService = new BookingServiceImpl(eventService,auditoriumService);
+        bookingService.setTicketDao(ticketDao);
         bookingService.bookTickets(Collections.singleton(ticket));
 
         Set<Ticket> purchasedTickets = bookingService.getPurchasedTicketsForEvent(event, AIR_TIME);

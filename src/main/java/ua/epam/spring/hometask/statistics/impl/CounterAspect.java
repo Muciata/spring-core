@@ -21,7 +21,7 @@ public class CounterAspect {
     private CounterStatsDao counterStatsDao;
 
     @Autowired
-    @Qualifier("Derby")
+    @Qualifier("DerbyCounterStatsDao")
     public void setCounterStatsDao(CounterStatsDao counterStatsDao) {
         this.counterStatsDao = counterStatsDao;
     }

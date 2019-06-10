@@ -1,6 +1,7 @@
 package ua.epam.spring.hometask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.dao.UserDao;
@@ -16,7 +17,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    @Qualifier("DerbyUserDao")
+    public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
 

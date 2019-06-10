@@ -3,12 +3,12 @@ package ua.epam.spring.hometask.integration;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ua.epam.spring.hometask.dao.*;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.*;
-import ua.epam.spring.hometask.dao.CounterStatsDao;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import ua.epam.spring.hometask.dao.DiscountStatsDao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -86,11 +85,17 @@ public class IntegrationTests {
     public void shouldBookTickets(){
         ApplicationContext applicationContext = getApplicationContext();
         BookingService bookingService = applicationContext.getBean(BookingService.class);
+        TicketDao ticketDao = applicationContext.getBean("DerbyTicketDao", TicketDao.class);
         User user = UserFixtures.createDefaultUser();
         LocalDateTime airTime = LocalDateTime.of(2019,10,10,20,0);
         Event event = EventFixtures.createEvent();
         event.setAirDates(new TreeSet<>(Collections.singleton(airTime)));
         Ticket ticket = new Ticket(user, event, airTime, 20);
+        ticketDao.addAll(Collections.singleton(ticket));
+        UserDao userDao = applicationContext.getBean("DerbyUserDao",UserDao.class);
+        userDao.saveUser(user);
+        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
+        eventDao.saveEvent(event);
 
         bookingService.bookTickets(Collections.singleton(ticket));
         Set<Ticket> purchasedTickets = bookingService.getPurchasedTicketsForEvent(event, airTime);
@@ -154,7 +159,7 @@ public class IntegrationTests {
         ApplicationContext applicationContext = getApplicationContext();
         EventService eventService = applicationContext.getBean(EventService.class);
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
-        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        CounterStatsDao eventStats = applicationContext.getBean("DerbyCounterStatsDao",CounterStatsDao.class);
         Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
         Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
         auditoriumService.save(insertAud1);

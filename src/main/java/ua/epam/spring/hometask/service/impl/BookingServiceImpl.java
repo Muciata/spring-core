@@ -1,6 +1,7 @@
 package ua.epam.spring.hometask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
@@ -27,9 +28,14 @@ public class BookingServiceImpl implements BookingService {
     private TicketDao ticketDao;
 
     @Autowired
-    public BookingServiceImpl(EventService eventService, AuditoriumService auditoriumService, TicketDao ticketDao) {
+    public BookingServiceImpl(EventService eventService, AuditoriumService auditoriumService) {
         this.eventService = eventService;
         this.auditoriumService = auditoriumService;
+    }
+
+    @Autowired
+    @Qualifier("DerbyTicketDao")
+    public void setTicketDao(TicketDao ticketDao) {
         this.ticketDao = ticketDao;
     }
 
