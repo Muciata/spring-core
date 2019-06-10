@@ -26,7 +26,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveUsers() {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         UserService userService = applicationContext.getBean(UserService.class);
 
         UserFixtures.createMultipleUsers(5).forEach(userService::save);
@@ -41,10 +41,15 @@ public class IntegrationTests {
 
     @Test
     public void shouldAddAndRemoveEvents(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         EventService eventService = applicationContext.getBean(EventService.class);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
 
-        eventService.save(EventFixtures.createEvent());
+        eventService.save(EventFixtures.createEvent("Left Auditorium"));
         Event eventById = eventService.getById(1L);
         Event eventByName = eventService.getByName("Hamlet");
 
@@ -56,9 +61,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldReturnAuditoriums(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service",
-                "ua.epam.spring.hometask.dao","ua.epam.spring.hometask.dao.impl",
-                "ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
         Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
@@ -74,9 +77,14 @@ public class IntegrationTests {
         assertEquals(2, auditoriumService.getAll().size());
     }
 
+    private AnnotationConfigApplicationContext getApplicationContext() {
+        return new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service",
+                "ua.epam.spring.hometask.dao","ua.epam.spring.hometask.dao.impl","ua.epam.spring.hometask.statistics");
+    }
+
     @Test
     public void shouldBookTickets(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         User user = UserFixtures.createDefaultUser();
         LocalDateTime airTime = LocalDateTime.of(2019,10,10,20,0);
@@ -93,7 +101,7 @@ public class IntegrationTests {
 
     @Test
     public void newUserBuysTickets(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         UserService userService = applicationContext.getBean(UserService.class);
         User user = UserFixtures.createDefaultUser();
@@ -102,6 +110,12 @@ public class IntegrationTests {
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
         DiscountService discountService = applicationContext.getBean("DiscountService",DiscountService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+
+
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
 
         userService.save(user);
         User userById = userService.getById(user.getId());
@@ -137,12 +151,16 @@ public class IntegrationTests {
     }
     @Test
     public void shouldCountOnlyEventByNameInvocations(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         EventService eventService = applicationContext.getBean(EventService.class);
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
 
-        eventService.save(EventFixtures.createEvent());
+        eventService.save(EventFixtures.createEvent("Left Auditorium"));
         for(int i=0;i<5;i++) {
             eventService.getByName("Hamlet");
             auditoriumService.getByName("Hamlet");
@@ -153,7 +171,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldCountPriceChecks(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         UserService userService = applicationContext.getBean(UserService.class);
         User user = UserFixtures.createDefaultUser();
         EventService eventService = applicationContext.getBean(EventService.class);
@@ -161,6 +179,13 @@ public class IntegrationTests {
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
         CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+
+
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
 
         userService.save(user);
         eventService.save(event);
@@ -173,7 +198,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldCountTicketBookings(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         UserService userService = applicationContext.getBean(UserService.class);
         User user = UserFixtures.createDefaultUser();
         EventService eventService = applicationContext.getBean(EventService.class);
@@ -181,7 +206,12 @@ public class IntegrationTests {
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
         CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
 
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
         userService.save(user);
         eventService.save(event);
         Set<Ticket> purchasedTickets = Collections.singleton(new Ticket(user, event, airTime, 20));
@@ -193,11 +223,11 @@ public class IntegrationTests {
 
     @Test
     public void shouldCountAllDiscountCalls(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext("ua.epam.spring.hometask.service","ua.epam.spring.hometask.statistics");
+        ApplicationContext applicationContext = getApplicationContext();
         User user = UserFixtures.createDefaultUser();
         Event event = EventFixtures.createEvent("Left Auditorium");
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        DiscountStatsDao discountStatsDao = applicationContext.getBean(DiscountStatsDao.class);
+        DiscountStatsDao discountStatsDao = applicationContext.getBean("DerbyDiscountStatsDao",DiscountStatsDao.class);
         DiscountService discountService = applicationContext.getBean("DiscountService",DiscountService.class);
 
         for(int i=0;i<5;i++) {

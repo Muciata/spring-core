@@ -16,6 +16,7 @@ final class DiscountAspect {
     private DiscountStatsDao discountStatsDao;
 
     @Autowired
+    @Qualifier("DerbyDiscountStatsDao")
     public void setDiscountStatsDao(DiscountStatsDao discountStatsDao) {
         this.discountStatsDao = discountStatsDao;
     }

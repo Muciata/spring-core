@@ -15,7 +15,7 @@ import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 
 @Repository("DerbyAuditoriumDao")
-final class DerbyAuditoriumDaoImpl implements AuditoriumDao {
+public final class DerbyAuditoriumDaoImpl implements AuditoriumDao {
 
     private JdbcTemplate jdbcTemplate;
 
