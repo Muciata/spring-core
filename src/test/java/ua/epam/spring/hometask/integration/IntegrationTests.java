@@ -91,13 +91,14 @@ public class IntegrationTests {
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
         Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        Ticket ticket = new Ticket(user, event, airTime, 20);
+
         auditoriumService.save(insertAud1);
         auditoriumService.save(insertAud2);
-        Event event = EventFixtures.createEvent("Left Auditorium");
         event.setAirDates(new TreeSet<>(Collections.singleton(airTime)));
-        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
         eventDao.saveEvent(event);
-        Ticket ticket = new Ticket(user, event, airTime, 20);
         ticketDao.addAll(Collections.singleton(ticket));
         UserDao userDao = applicationContext.getBean("DerbyUserDao",UserDao.class);
         userDao.saveUser(user);
@@ -188,7 +189,7 @@ public class IntegrationTests {
         Event event = EventFixtures.createEvent("Left Auditorium");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        CounterStatsDao eventStats = applicationContext.getBean("DerbyCounterStatsDao",CounterStatsDao.class);
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
         Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
@@ -209,24 +210,33 @@ public class IntegrationTests {
     @Test
     public void shouldCountTicketBookings(){
         ApplicationContext applicationContext = getApplicationContext();
-        UserService userService = applicationContext.getBean(UserService.class);
-        User user = UserFixtures.createDefaultUser();
-        EventService eventService = applicationContext.getBean(EventService.class);
-        Event event = EventFixtures.createEvent("Left Auditorium");
         BookingService bookingService = applicationContext.getBean(BookingService.class);
-        LocalDateTime airTime = LocalDateTime.of(2019, 10, 12, 19, 0);
-        CounterStatsDao eventStats = applicationContext.getBean("Derby",CounterStatsDao.class);
+        TicketDao ticketDao = applicationContext.getBean("DerbyTicketDao", TicketDao.class);
+        User user = UserFixtures.createDefaultUser();
+        LocalDateTime airTime = LocalDateTime.of(2019,10,12,19,0);
         AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
         Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
         Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
+        Event event = EventFixtures.createEvent("Left Auditorium");
+        Ticket ticket = new Ticket(user, event, airTime, 20);
 
         auditoriumService.save(insertAud1);
         auditoriumService.save(insertAud2);
-        userService.save(user);
-        eventService.save(event);
-        Set<Ticket> purchasedTickets = Collections.singleton(new Ticket(user, event, airTime, 20));
-        bookingService.bookTickets(purchasedTickets);
-        bookingService.bookTickets(purchasedTickets);
+        event.setAirDates(new TreeSet<>(Collections.singleton(airTime)));
+        eventDao.saveEvent(event);
+        ticketDao.addAll(Collections.singleton(ticket));
+        UserDao userDao = applicationContext.getBean("DerbyUserDao",UserDao.class);
+        userDao.saveUser(user);
+
+        bookingService.bookTickets(Collections.singleton(ticket));
+        bookingService.bookTickets(Collections.singleton(ticket));
+
+        CounterStatsDao eventStats = applicationContext.getBean("DerbyCounterStatsDao",CounterStatsDao.class);
+
+
+
+
 
         assertEquals(2,eventStats.getStatsForName("Hamlet").getCallsByTicketsBooked());
     }
