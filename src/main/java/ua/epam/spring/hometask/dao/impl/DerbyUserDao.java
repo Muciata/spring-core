@@ -8,7 +8,6 @@ import ua.epam.spring.hometask.dao.TicketDao;
 import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
-import ua.epam.spring.hometask.helpers.DateHelper;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -62,11 +61,23 @@ public class DerbyUserDao implements UserDao {
         return users;
     }
 
+    public Collection<Object[]> getAllDataOnly() {
+        List<Object[]> users = jdbcTemplate.query("SELECT id, first_name, last_name, email, birthday FROM users",
+                (r, i) -> new Object[]{r.getLong(1),r.getString(2),r.getString(3),
+                            r.getString(4),toLocalDate(r.getLong(5))});
+        return users;
+    }
+
     private void enrichUser(User user) {
-        Set<Ticket> tickets = ticketDao.getAll().stream()
+        Collection<Ticket> all = ticketDao.getAllWithoutUser();
+        Set<Ticket> tickets = all.stream()
                 .filter(t -> t.getUser().getId() == user.getId())
                 .collect(Collectors.toSet());
-        user.setTickets(new TreeSet(tickets));
+        //Collection<Object[]> allDataOnly = getAllDataOnly();
+        List<Ticket> enrichedTickets = tickets.stream().map(t ->
+                new Ticket(user, t.getEvent(), t.getDateTime(), t.getSeat()))
+                .collect(Collectors.toList());
+        user.setTickets(new TreeSet(enrichedTickets));
     }
 
     @Override

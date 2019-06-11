@@ -75,9 +75,21 @@ public class DerbyTicketDaoImpl implements TicketDao {
             User user = userDao.getById((int) t[0]);
             Event event = eventDao.getByName((String) t[1]);
             LocalDateTime airTime = toLocalDateTime((long) t[2]);
-            return new Ticket(user, event, airTime, (long) t[3]);
+            return new Ticket(user, event, airTime, (int) t[3]);
         }).collect(Collectors.toList());
 
         return tickets;
+    }
+
+    @Override
+    public Collection<Ticket> getAllWithoutUser() {
+        List<Ticket> data = jdbcTemplate.query("SELECT user_id,event_name, airtime, seat FROM tickets", (r, i) -> {
+            User user = new User();
+            user.setId(r.getLong(1));
+            Event event = eventDao.getByName(r.getString(2));
+            LocalDateTime airTime = toLocalDateTime(r.getLong(3));
+            return new Ticket(user, event, airTime,r.getInt(4));
+        });
+        return data;
     }
 }

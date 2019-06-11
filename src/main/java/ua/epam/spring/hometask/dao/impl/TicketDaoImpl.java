@@ -23,4 +23,9 @@ public class TicketDaoImpl implements TicketDao {
     public Collection<Ticket> getAll() {
         return allTickets;
     }
+
+    @Override
+    public Collection<Ticket> getAllWithoutUser() {
+        return allTickets;
+    }
 }

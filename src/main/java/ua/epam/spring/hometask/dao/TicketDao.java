@@ -12,4 +12,6 @@ public interface TicketDao {
     void addAll(Set<Ticket> tickets);
 
     Collection<Ticket> getAll();
+
+    Collection<Ticket> getAllWithoutUser();
 }

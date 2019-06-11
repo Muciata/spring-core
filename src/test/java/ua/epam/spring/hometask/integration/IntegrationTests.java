@@ -87,15 +87,20 @@ public class IntegrationTests {
         BookingService bookingService = applicationContext.getBean(BookingService.class);
         TicketDao ticketDao = applicationContext.getBean("DerbyTicketDao", TicketDao.class);
         User user = UserFixtures.createDefaultUser();
-        LocalDateTime airTime = LocalDateTime.of(2019,10,10,20,0);
-        Event event = EventFixtures.createEvent();
+        LocalDateTime airTime = LocalDateTime.of(2019,10,12,19,0);
+        AuditoriumService auditoriumService = applicationContext.getBean(AuditoriumService.class);
+        Auditorium insertAud1 = applicationContext.getBean("auditorium1", Auditorium.class);
+        Auditorium insertAud2 = applicationContext.getBean("auditorium2", Auditorium.class);
+        auditoriumService.save(insertAud1);
+        auditoriumService.save(insertAud2);
+        Event event = EventFixtures.createEvent("Left Auditorium");
         event.setAirDates(new TreeSet<>(Collections.singleton(airTime)));
+        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
+        eventDao.saveEvent(event);
         Ticket ticket = new Ticket(user, event, airTime, 20);
         ticketDao.addAll(Collections.singleton(ticket));
         UserDao userDao = applicationContext.getBean("DerbyUserDao",UserDao.class);
         userDao.saveUser(user);
-        EventDao eventDao = applicationContext.getBean("DerbyEventDao", EventDao.class);
-        eventDao.saveEvent(event);
 
         bookingService.bookTickets(Collections.singleton(ticket));
         Set<Ticket> purchasedTickets = bookingService.getPurchasedTicketsForEvent(event, airTime);
